@@ -1,6 +1,6 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/apiResponse.js";
+import ApiResponse from "../utils/ApiResponse.js";
 import api from "../config/axios.js";
 import { WatchList } from "../models/watchlist.model.js";
 
