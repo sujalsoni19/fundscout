@@ -1,212 +1,150 @@
 # FundScout
 
-## Live URLs
+Search Indian mutual funds, save them to a watchlist, and track NAV growth with interactive 1Y / 3Y / 5Y / All charts.
 
-Frontend: 
-https://fundscout-live.vercel.app
+## Live Demo
 
-Backend:
-https://fundscout.onrender.com
+- **Frontend:** https://fundscout-live.vercel.app
+- **Backend API:** https://fundscout.onrender.com
+
+> **Note:** This app runs on free hosting tiers. If it hasn't been used for a while, the backend may take around a minute to wake up on the first request, and the MongoDB Atlas cluster may have been paused.
 
 ---
 
 ## Overview
 
-A full-stack MERN application that allows users to:
+A full-stack MERN app built as a take-home assignment for a MERN stack role. The brief: search funds, keep a persistent watchlist, and show a NAV performance chart, using the free public [MFapi.in](https://www.mfapi.in/) API for fund data.
 
-- Search Indian Mutual Funds
-- Add/remove funds from a persistent watchlist
-- View historical NAV performance charts
-- Filter NAV charts by:
-  - 1Y
-  - 3Y
-  - 5Y
-  - All
+---
 
-The application uses the public MFAPI.in API for mutual fund data.
+## Features
+
+- Debounced search for Indian mutual funds
+- Persistent watchlist stored in MongoDB, with duplicate prevention
+- Remove funds from the watchlist
+- Fund detail page with a historical NAV line chart
+- Range filters: 1Y, 3Y, 5Y and All
+- Loading, empty and error states
 
 ---
 
 ## Tech Stack
 
-### Frontend
-- React
-- Tailwind CSS
-- shadcn/ui
-- Recharts
-- Axios
-
-### Backend
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-
-### Deployment
-- Frontend → Vercel
-- Backend → Render
-- Database → MongoDB Atlas
+| Layer | Technology |
+|-------|------------|
+| Frontend | React, Tailwind CSS, shadcn/ui, Recharts, Axios |
+| Backend | Node.js, Express.js |
+| Database | MongoDB (Mongoose), MongoDB Atlas |
+| Data source | [MFapi.in](https://www.mfapi.in/) |
+| Hosting | Vercel (frontend), Render (backend), MongoDB Atlas (database) |
 
 ---
 
-# Local Setup
+## API Endpoints
 
-## 1. Clone Repository
+### Watchlist
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/watchlist` | Get all watchlist items |
+| POST | `/api/watchlist` | Add a fund to the watchlist |
+| DELETE | `/api/watchlist/:schemeCode` | Remove a fund from the watchlist |
+
+### Fund details
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/funds/:schemeCode` | Get historical NAV data for a fund |
+
+---
+
+## Running Locally
+
+### Prerequisites
+
+- Node.js 18 or later
+- A MongoDB Atlas connection string (or a local MongoDB instance)
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/sujalsoni19/fundscout.git
+cd fundscout
 ```
 
----
-
-# Backend Setup
-
-## Navigate to backend
+### 2. Backend
 
 ```bash
 cd backend
-```
-
-## Install dependencies
-
-```bash
 npm install
 ```
 
-## Create `.env` file inside backend folder
-
-Add the following variables:
+Create a `.env` file in `backend/`:
 
 ```env
 PORT=5000
-
 MONGODB_URI=your_mongodb_atlas_connection_string
 DB_NAME=your_db_name
-
-CORS_ORIGIN=http://localhost:5173(your frontend url)
+CORS_ORIGIN=http://localhost:5173
 ```
 
-## Start backend server
+Start the server:
 
 ```bash
 npm run dev
 ```
 
-Backend will run on:
+The API runs at `http://localhost:5000`.
 
-```txt
-http://localhost:5000
-```
-
----
-
-# Frontend Setup
-
-## Navigate to frontend
+### 3. Frontend
 
 ```bash
 cd frontend
-```
-
-## Install dependencies
-
-```bash
 npm install
 ```
 
-## Create `.env` file inside frontend folder
-
-Add:
+Create a `.env` file in `frontend/`:
 
 ```env
-VITE_API_BASE_URL=http://localhost:5000(your backend url)
+VITE_API_BASE_URL=http://localhost:5000
 ```
 
-## Start frontend server
+Start the app:
 
 ```bash
 npm run dev
 ```
 
-Frontend will run on:
-
-```txt
-http://localhost:5173
-```
+The app runs at `http://localhost:5173`.
 
 ---
 
-# Features
+## Deployment
 
-- Debounced mutual fund search
-- Persistent MongoDB watchlist
-- Duplicate prevention for watchlist items
-- Historical NAV chart visualization
-- Time range filters
-- Loading and error state handling
+- The frontend is deployed on Vercel, the backend on Render, and the database on MongoDB Atlas.
+- Environment variables are set on each platform, and no secrets are committed.
+- The backend's CORS setting allows the deployed frontend's origin, and the frontend's API base URL points to the deployed backend.
 
 ---
 
-# API Endpoints
+## Assumptions
 
-## Watchlist
-
-### Get all watchlist items
-
-```http
-GET /api/watchlist
-```
-
-### Add item to watchlist
-
-```http
-POST /api/watchlist
-```
-
-### Remove item from watchlist
-
-```http
-DELETE /api/watchlist/:schemeCode
-```
+- A single shared watchlist is used, since no user accounts were required.
+- No authentication is implemented.
+- MFapi.in is assumed to be available.
 
 ---
 
-## Fund Details
+## Known Limitations
 
-### Get historical NAV data
-
-```http
-GET /api/funds/:schemeCode
-```
-
----
-
-# Deployment Notes
-
-- Frontend deployed on Vercel
-- Backend deployed on Render
-- MongoDB Atlas used for database
-- Environment variables configured on deployment platforms
-- CORS configured for deployed frontend origin
+- Some schemes on MFapi.in have outdated or incomplete NAV history.
+- Search results are not paginated.
+- NAV responses are not cached on the backend.
+- On free tiers, the first request after a period of inactivity can be slow.
 
 ---
 
-# Assumptions
+## Author
 
-- Single shared watchlist for all users
-- No authentication implemented
-- MFAPI.in service availability assumed
-
----
-
-# Known Limitations
-
-- Some MFAPI schemes may contain outdated or incomplete NAV history
-- No pagination implemented for search results
-- No backend caching implemented for NAV responses
-
----
-
-# Author
-
-Sujal Soni
+**Sujal Soni**
+[GitHub](https://github.com/sujalsoni19) 
